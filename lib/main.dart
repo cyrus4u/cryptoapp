@@ -1,11 +1,18 @@
+import 'package:cryptoapp/provider/theme_provider.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => ThemeProvider())],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -18,7 +25,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Consumer<ThemeProvider>(builder: (context,themeProvider,child){
+      return MaterialApp(
+        themeMode: themeProvider.themeMode,
+        theme: MyThemes.lightTheme,
+        darkTheme: MyThemes.darkTheme,
       debugShowCheckedModeBanner: false,
       home: Directionality(
         textDirection: TextDirection.ltr,
@@ -33,5 +44,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+    });
+    
   }
 }
