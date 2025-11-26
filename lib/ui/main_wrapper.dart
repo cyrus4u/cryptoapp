@@ -1,0 +1,25 @@
+import 'package:cryptoapp/ui/home_page.dart';
+import 'package:cryptoapp/ui/market_view_page.dart';
+import 'package:cryptoapp/ui/profile_page.dart';
+import 'package:flutter/material.dart';
+
+class MainWrapper extends StatefulWidget {
+  const MainWrapper({super.key});
+
+  @override
+  State<MainWrapper> createState() => _MainWrapperState();
+}
+
+class _MainWrapperState extends State<MainWrapper> {
+  final PageController _myPage = PageController(initialPage: 0);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _myPage,
+        children: [HomePage(), MarketViewPage(), ProfilePage()],
+      ),
+    );
+  }
+}
+

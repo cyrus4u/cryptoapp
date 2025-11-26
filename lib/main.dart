@@ -1,5 +1,7 @@
 import 'package:cryptoapp/provider/theme_provider.dart';
+import 'package:cryptoapp/ui/main_wrapper.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +18,14 @@ void main() {
     ),
   );
 }
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+  };
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -30,6 +40,7 @@ class _MyAppState extends State<MyApp> {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
+          scrollBehavior: MyCustomScrollBehavior(),
           locale: Locale('en'),
           localizationsDelegates: [
             AppLocalizations.delegate, // Add this line
@@ -49,18 +60,7 @@ class _MyAppState extends State<MyApp> {
             builder: (context) {
               return Directionality(
                 textDirection: TextDirection.ltr,
-                child: Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                      'Exchange',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.blue,
-                    centerTitle: true,
-                    actions: [ThemeSwitcher()],
-                  ),
-                  body: Container(child: Center(child: Text(AppLocalizations.of(context)!.helloWorld)),),
-                ),
+                child: MainWrapper(),
               );
             },
           ),
