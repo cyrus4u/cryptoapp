@@ -1,6 +1,8 @@
 import 'package:cryptoapp/ui/home_page.dart';
 import 'package:cryptoapp/ui/market_view_page.dart';
 import 'package:cryptoapp/ui/profile_page.dart';
+import 'package:cryptoapp/ui/ui_helper/bottom_nav.dart';
+import 'package:cryptoapp/ui/watch_list_page.dart';
 import 'package:flutter/material.dart';
 
 class MainWrapper extends StatefulWidget {
@@ -15,11 +17,17 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {},
+        child: Icon(Icons.compare_arrows_outlined),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomNav(controller: _myPage,),
       body: PageView(
         controller: _myPage,
-        children: [HomePage(), MarketViewPage(), ProfilePage()],
+        children: [HomePage(), MarketViewPage(), ProfilePage(),WatchListPage()],
       ),
     );
   }
 }
-
