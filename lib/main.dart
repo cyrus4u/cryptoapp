@@ -56,13 +56,9 @@ class _MyAppState extends State<MyApp> {
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
           debugShowCheckedModeBanner: false,
-          home: Builder(
-            builder: (context) {
-              return Directionality(
-                textDirection: TextDirection.ltr,
-                child: MainWrapper(),
-              );
-            },
+          home: Directionality(
+            textDirection: TextDirection.ltr,
+            child: MainWrapper(),
           ),
         );
       },

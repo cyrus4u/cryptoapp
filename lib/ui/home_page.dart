@@ -14,6 +14,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final PageController _pageViewController = PageController(initialPage: 0);
 
+  var defaultChoiceIndex = 0;
+
+  final List<String> _choicesList = [
+    'Top MarketCaps',
+    'Top Gainers',
+    'Top Losers',
+  ];
+
   @override
   Widget build(BuildContext context) {
     var primaryColor = Theme.of(context).primaryColor;
@@ -68,16 +76,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30,
-                width: double.infinity,
-                child: Marquee(
-                  text: 'This is top news for application 💰',
-                  style: Theme.of(context).textTheme.bodySmall,
+
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: SizedBox(
+                  height: 30,
+                  width: double.infinity,
+                  child: Marquee(
+                    text: 'This is top news for application 💰',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 5.0,
+                  vertical: 10,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -106,6 +121,35 @@ class _HomePageState extends State<HomePage> {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0, left: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(_choicesList.length, (index) {
+                        return ChoiceChip(
+                          label: Text(
+                            _choicesList[index],
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          selected: defaultChoiceIndex == index,
+                          selectedColor: Colors.blue,
+                          onSelected: (value) {
+                           setState(() {
+                              defaultChoiceIndex = value
+                                ? index
+                                : defaultChoiceIndex;
+                           });
+                          },
+                        );
+                      }),
                     ),
                   ],
                 ),
