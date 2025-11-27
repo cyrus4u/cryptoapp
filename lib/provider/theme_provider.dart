@@ -15,7 +15,7 @@ class MyThemes {
   static final darkTheme = ThemeData(
     textTheme: TextTheme(
       titleLarge: GoogleFonts.ubuntu(
-        color: Colors.black,
+        color: Colors.white,
         fontSize: 22,
         fontWeight: FontWeight.bold,
       ),
