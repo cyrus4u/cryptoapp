@@ -1,6 +1,7 @@
 import 'package:cryptoapp/ui/ui_helper/home_page_view.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -65,6 +66,48 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                width: double.infinity,
+                child: Marquee(
+                  text: 'This is top news for application 💰',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: EdgeInsets.all(20),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          'Buy',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: EdgeInsets.all(20),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          'Sell',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
