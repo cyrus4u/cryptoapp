@@ -1,3 +1,4 @@
+import 'package:cryptoapp/provider/crypto_data_provider.dart';
 import 'package:cryptoapp/provider/theme_provider.dart';
 import 'package:cryptoapp/ui/main_wrapper.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
@@ -13,11 +14,15 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => ThemeProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
+      ],
       child: MyApp(),
     ),
   );
 }
+
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
