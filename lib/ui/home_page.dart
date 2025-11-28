@@ -126,34 +126,30 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 5.0, left: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: List.generate(_choicesList.length, (index) {
-                        return ChoiceChip(
-                          label: Text(
-                            _choicesList[index],
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          selected: defaultChoiceIndex == index,
-                          selectedColor: Colors.blue,
-                          onSelected: (value) {
-                           setState(() {
-                              defaultChoiceIndex = value
-                                ? index
-                                : defaultChoiceIndex;
-                           });
-                          },
-                        );
-                      }),
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(_choicesList.length, (index) {
+                    return ChoiceChip(
+                      label: Text(
+                        _choicesList[index],
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      selected: defaultChoiceIndex == index,
+                      selectedColor: Colors.blue,
+                      onSelected: (value) {
+                        setState(() {
+                          defaultChoiceIndex = value
+                              ? index
+                              : defaultChoiceIndex;
+                        });
+                      },
+                    );
+                  }),
                 ),
               ),
+              
             ],
           ),
         ),
