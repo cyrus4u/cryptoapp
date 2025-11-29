@@ -1,5 +1,4 @@
-
-class CryptoCurrencyList {
+class CryptoData {
   int? id;
   String? name;
   String? symbol;
@@ -22,7 +21,7 @@ class CryptoCurrencyList {
   List<dynamic>? auditInfoList;
   List<int>? badges;
 
-  CryptoCurrencyList({
+  CryptoData({
     this.id,
     this.name,
     this.symbol,
@@ -46,7 +45,7 @@ class CryptoCurrencyList {
     this.badges,
   });
 
-  CryptoCurrencyList.fromJson(Map<String, dynamic> json) {
+  CryptoData.fromJson(Map<String, dynamic> json) {
     if (json["id"] is int) {
       id = json["id"];
     }
@@ -114,8 +113,8 @@ class CryptoCurrencyList {
     }
   }
 
-  static List<CryptoCurrencyList> fromList(List<Map<String, dynamic>> list) {
-    return list.map(CryptoCurrencyList.fromJson).toList();
+  static List<CryptoData> fromList(List<Map<String, dynamic>> list) {
+    return list.map(CryptoData.fromJson).toList();
   }
 
   Map<String, dynamic> toJson() {

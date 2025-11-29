@@ -33,7 +33,7 @@ class AllCryptoModel {
 }
 
 class Data {
-  List<CryptoCurrencyList>? cryptoCurrencyList;
+  List<CryptoData>? cryptoCurrencyList;
   String? totalCount;
 
   Data({this.cryptoCurrencyList, this.totalCount});
@@ -43,7 +43,7 @@ class Data {
       cryptoCurrencyList = json["cryptoCurrencyList"] == null
           ? null
           : (json["cryptoCurrencyList"] as List)
-                .map((e) => CryptoCurrencyList.fromJson(e))
+                .map((e) => CryptoData.fromJson(e))
                 .toList();
     }
     if (json["totalCount"] is String) {
@@ -66,4 +66,3 @@ class Data {
     return _data;
   }
 }
-
