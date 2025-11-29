@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final cryptoProvider = Provider.of<CryptoDataProvider>(context);
     var primaryColor = Theme.of(context).primaryColor;
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -163,6 +164,14 @@ class _HomePageState extends State<HomePage> {
                           defaultChoiceIndex = value
                               ? index
                               : defaultChoiceIndex;
+                          switch (index) {
+                            case 0:
+                              cryptoProvider.getTopMarketCapData();
+                            case 1:
+                              cryptoProvider.getTopGainerData();
+                            case 2:
+                              cryptoProvider.getTopLoserData();
+                          }
                         });
                       },
                     );
@@ -382,6 +391,9 @@ class _HomePageState extends State<HomePage> {
                                           style: Theme.of(
                                             context,
                                           ).textTheme.bodySmall,
+                                          maxLines: 1,
+                                          
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
                                           model[index].symbol!,

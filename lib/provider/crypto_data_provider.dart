@@ -26,4 +26,36 @@ class CryptoDataProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  getTopGainerData() async {
+    state = ResponseModel.loading('...loading');
+    try {
+      response = await apiProvider.getTopGainersData();
+      if (response.statusCode == 200) {
+        dataFuture = AllCryptoModel.fromJson(response.data);
+        state = ResponseModel.completed(dataFuture);
+      } else {
+        state = ResponseModel.error('something is wrong...');
+      }
+      notifyListeners();
+    } catch (e) {
+      state = ResponseModel.error('check your connection...');
+      notifyListeners();
+    }
+  }
+  getTopLoserData() async {
+    state = ResponseModel.loading('...loading');
+    try {
+      response = await apiProvider.getTopLosersData();
+      if (response.statusCode == 200) {
+        dataFuture = AllCryptoModel.fromJson(response.data);
+        state = ResponseModel.completed(dataFuture);
+      } else {
+        state = ResponseModel.error('something is wrong...');
+      }
+      notifyListeners();
+    } catch (e) {
+      state = ResponseModel.error('check your connection...');
+      notifyListeners();
+    }
+  }
 }

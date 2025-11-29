@@ -48,6 +48,8 @@ class MyThemes {
       labelSmall: GoogleFonts.ubuntu(color: Colors.black38, fontSize: 13),
       titleSmall: GoogleFonts.ubuntu(color: Colors.black, fontSize: 12),
     ),
+    
+
     unselectedWidgetColor: Colors.black,
     primaryColorLight: Colors.white,
     scaffoldBackgroundColor: Colors.white,
