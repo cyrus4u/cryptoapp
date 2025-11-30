@@ -1,45 +1,114 @@
-
 import 'package:dio/dio.dart';
 
 class ApiProvider {
-  // Base URL for your Supabase Edge Function
-  // This function acts as a proxy to the CoinMarketCap API
-  static final String _nodeBase =
-      'https://ukrshwdqetdpzfsjmgbc.supabase.co/functions/v1/crypto';
+  dynamic getAllCryptoData() async {
+    return await Dio().get(
+      "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=1000&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap",
+    );
+  }
 
-  // Supabase "anon key" for authentication
-  // Required to call the Supabase Edge Function securely
-  static const String _supabaseAnonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrcnNod2RxZXRkcHpmc2ptZ2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NDkzMzMsImV4cCI6MjA3ODQyNTMzM30.KNnALmGW6pW5GrUslwnL07dNUQRDwbYkzIhJV2bi4XU'; // truncated
+  dynamic getTopMarketCapData() async {
+    return await Dio().get(
+      "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap",
+    );
+  }
 
-  // Dio instance for making HTTP requests
-  final Dio _dio = Dio(
-    BaseOptions(
-      connectTimeout: const Duration(seconds: 20), // wait up to 20s for connection
-      receiveTimeout: const Duration(seconds: 30), // wait up to 30s for response
-      followRedirects: true, // follow HTTP redirects automatically
-      validateStatus: (status) => status != null && status < 500, // treat 4xx as error
-      headers: {
-        // Both 'apikey' and 'Authorization' are required for Supabase function
-        'apikey': _supabaseAnonKey,
-        'Authorization': 'Bearer $_supabaseAnonKey',
-        'Content-Type': 'application/json',
-      },
-    ),
-  );
+  dynamic getTopGainerData() async {
+    return await Dio().get(
+      "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=percent_change_24h&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap",
+    );
+  }
 
-  // Fetch all crypto
-  Future<Response<dynamic>> getAllCryptoData() => _dio.get('$_nodeBase');
+  dynamic getTopLoserData() async {
+    return await Dio().get(
+      "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=percent_change_24h&sortType=asc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap",
+    );
+  }
 
-  // Fetch top market cap coins
-  Future<Response<dynamic>> getTopMarketCapData() => _dio.get('$_nodeBase/topMarketCap');
+  dynamic callRegisterApi(name, email, password) async {
+    var formData = FormData.fromMap({
+      'name': name,
+      'email': email,
+      'password': password,
+      'password_confirmation': password,
+    });
 
-  // Fetch top gainers
-  Future<Response<dynamic>> getTopGainerData() => _dio.get('$_nodeBase/topGainer');
+    final response = await Dio().post(
+      'https://besenior.ir/api/register',
+      data: formData,
+    );
 
-  // Fetch top losers
-  Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
+    return response;
+  }
 }
+// ************************************************************************
+
+/// A service provider for making API calls related to cryptocurrency data
+/// and user authentication.
+///
+/// ─────────────────────────────────────────────────────────────────────
+/// Why Cloudflare & Supabase (Web CORS Fix)
+/// ─────────────────────────────────────────────────────────────────────
+/// - Direct browser calls to public APIs like CoinMarketCap often fail
+///   because of strict **CORS restrictions**
+///
+/// - Mobile apps are not affected because they make requests directly
+///   from the device.
+/// 
+/// To make Web builds work:
+///   1️⃣ Cloudflare Worker → secure proxy that fetches crypto data
+///   2️⃣ Supabase Edge Function → adds authentication + protects API keys
+///
+/// - This protects sensitive keys and ensures the app works on:
+///     ✔ Android / iOS Emulator
+///     ✔ Physical Phones
+///     ✔ Chrome / Flutter Web
+///
+/// NOTE:
+/// Replace the hardcoded endpoints below with your Worker/Supabase URLs  
+/// when building for Web.
+///
+// import 'package:dio/dio.dart';
+
+// class ApiProvider {
+//   // Base URL for your Supabase Edge Function
+//   // This function acts as a proxy to the CoinMarketCap API
+//   static final String _nodeBase =
+//       'https://ukrshwdqetdpzfsjmgbc.supabase.co/functions/v1/crypto';
+
+//   // Supabase "anon key" for authentication
+//   // Required to call the Supabase Edge Function securely
+//   static const String _supabaseAnonKey =
+//       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrcnNod2RxZXRkcHpmc2ptZ2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NDkzMzMsImV4cCI6MjA3ODQyNTMzM30.KNnALmGW6pW5GrUslwnL07dNUQRDwbYkzIhJV2bi4XU'; // truncated
+
+//   // Dio instance for making HTTP requests
+//   final Dio _dio = Dio(
+//     BaseOptions(
+//       connectTimeout: const Duration(seconds: 20), // wait up to 20s for connection
+//       receiveTimeout: const Duration(seconds: 30), // wait up to 30s for response
+//       followRedirects: true, // follow HTTP redirects automatically
+//       validateStatus: (status) => status != null && status < 500, // treat 4xx as error
+//       headers: {
+//         // Both 'apikey' and 'Authorization' are required for Supabase function
+//         'apikey': _supabaseAnonKey,
+//         'Authorization': 'Bearer $_supabaseAnonKey',
+//         'Content-Type': 'application/json',
+//       },
+//     ),
+//   );
+
+//   // Fetch all crypto
+//   Future<Response<dynamic>> getAllCryptoData() => _dio.get('$_nodeBase');
+
+//   // Fetch top market cap coins
+//   Future<Response<dynamic>> getTopMarketCapData() => _dio.get('$_nodeBase/topMarketCap');
+
+//   // Fetch top gainers
+//   Future<Response<dynamic>> getTopGainerData() => _dio.get('$_nodeBase/topGainer');
+
+//   // Fetch top losers
+//   Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
+// }
 // **************************************************************************************
 
 // import 'package:dio/dio.dart';
@@ -240,4 +309,3 @@ class ApiProvider {
 //     return response;
 //   }
 // }
-
