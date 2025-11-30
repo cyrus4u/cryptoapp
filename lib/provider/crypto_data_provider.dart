@@ -29,7 +29,7 @@ class CryptoDataProvider extends ChangeNotifier {
   getTopGainerData() async {
     state = ResponseModel.loading('...loading');
     try {
-      response = await apiProvider.getTopGainersData();
+      response = await apiProvider.getTopGainerData();
       if (response.statusCode == 200) {
         dataFuture = AllCryptoModel.fromJson(response.data);
         state = ResponseModel.completed(dataFuture);
@@ -45,7 +45,7 @@ class CryptoDataProvider extends ChangeNotifier {
   getTopLoserData() async {
     state = ResponseModel.loading('...loading');
     try {
-      response = await apiProvider.getTopLosersData();
+      response = await apiProvider.getTopLoserData();
       if (response.statusCode == 200) {
         dataFuture = AllCryptoModel.fromJson(response.data);
         state = ResponseModel.completed(dataFuture);

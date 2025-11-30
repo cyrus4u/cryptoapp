@@ -1,85 +1,52 @@
+
 import 'package:dio/dio.dart';
 
 class ApiProvider {
-  getTopMarketCapData() async {
-    var response = await Dio().get(
-      'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=50&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap',
-    );
-    return response;
-  }
-  getTopGainersData() async {
-    var response = await Dio().get(
-      'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=50&sortBy=percent_change_24h&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap',
-    );
-    return response;
-  }
-  getTopLosersData() async {
-    var response = await Dio().get(
-      'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=50&sortBy=percent_change_24h&sortType=asc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap',
-    );
-    return response;
-  }
+  // Base URL for your Supabase Edge Function
+  // This function acts as a proxy to the CoinMarketCap API
+  static final String _nodeBase =
+      'https://ukrshwdqetdpzfsjmgbc.supabase.co/functions/v1/crypto';
+
+  // Supabase "anon key" for authentication
+  // Required to call the Supabase Edge Function securely
+  static const String _supabaseAnonKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrcnNod2RxZXRkcHpmc2ptZ2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NDkzMzMsImV4cCI6MjA3ODQyNTMzM30.KNnALmGW6pW5GrUslwnL07dNUQRDwbYkzIhJV2bi4XU'; // truncated
+
+  // Dio instance for making HTTP requests
+  final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 20), // wait up to 20s for connection
+      receiveTimeout: const Duration(seconds: 30), // wait up to 30s for response
+      followRedirects: true, // follow HTTP redirects automatically
+      validateStatus: (status) => status != null && status < 500, // treat 4xx as error
+      headers: {
+        // Both 'apikey' and 'Authorization' are required for Supabase function
+        'apikey': _supabaseAnonKey,
+        'Authorization': 'Bearer $_supabaseAnonKey',
+        'Content-Type': 'application/json',
+      },
+    ),
+  );
+
+  // Fetch all crypto
+  Future<Response<dynamic>> getAllCryptoData() => _dio.get('$_nodeBase');
+
+  // Fetch top market cap coins
+  Future<Response<dynamic>> getTopMarketCapData() => _dio.get('$_nodeBase/topMarketCap');
+
+  // Fetch top gainers
+  Future<Response<dynamic>> getTopGainerData() => _dio.get('$_nodeBase/topGainer');
+
+  // Fetch top losers
+  Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
 }
-// // import 'package:dio/dio.dart';
-// // import 'package:flutter/foundation.dart' show kIsWeb;
-// // import 'dart:io' show Platform;
-
-// // class Apiprovider {
-// //   Future<Response<dynamic>> getTopMarketCapData() async {
-// //     // 🔹 Target API
-// //     const targetUrl =
-// //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap';
-
-// //     // 🔹 Determine proxy URL dynamically
-// //     String proxyBase;
-// //     if (kIsWeb) {
-// //       proxyBase = 'http://localhost:3000/api?url=';
-// //     } else if (Platform.isAndroid) {
-// //       // For emulator or real device, use your laptop IP (the hotspot host IP)
-// //       proxyBase = 'http://10.224.44.118:3000/api?url=';
-// //     } else if (Platform.isIOS) {
-// //       proxyBase = 'http://localhost:3000/api?url=';
-// //     } else {
-// //       // Fallback for other platforms
-// //       proxyBase = 'http://localhost:3000/api?url=';
-// //     }
-
-// //     // 🔹 Combine URLs safely
-// //     final encodedTarget = Uri.encodeComponent(targetUrl);
-// //     final fullUrl = '$proxyBase$encodedTarget';
-
-// //     final dio = Dio(
-// //       BaseOptions(
-// //         followRedirects: true,
-// //         receiveTimeout: const Duration(seconds: 30),
-// //         connectTimeout: const Duration(seconds: 15),
-// //         responseType: ResponseType.json,
-// //         validateStatus: (status) => status != null && status < 500,
-// //       ),
-// //     );
-
-// //     try {
-// //       final response = await dio.get(fullUrl);
-// //       print('✅ Response status: ${response.statusCode}');
-// //       return response;
-// //     } on DioException catch (e) {
-// //       print('❌ DioException: ${e.message}');
-// //       if (e.response != null) {
-// //         print('Response data: ${e.response!.data}');
-// //       }
-// //       rethrow;
-// //     } catch (e) {
-// //       print('❌ Other Error: $e');
-// //       rethrow;
-// //     }
-// //   }
-// // }
-// // ***********************************************************************************************************************
+// **************************************************************************************
 
 // import 'package:dio/dio.dart';
 
 // class ApiProvider {
-//   // Replace with your actual worker URL
+//   // Cloudflare Worker URL
+//   // This worker proxies requests to the real CoinMarketCap API
 //   static const _workerBase =
 //       'https://small-forest-a15e.instagrambay4u.workers.dev/?url=';
 
@@ -87,18 +54,23 @@ class ApiProvider {
 //   static const _proxyKey = null; // e.g. 'MY_SECRET' or null if not using key
 
 //   Future<Response<dynamic>> getAllCryptoData() async {
+//     //  Original CoinMarketCap API URL
 //     final targetUrl =
 //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing'
-//         '?start=1&limit=1000&sortBy=market_cap&sortType=desc'
+//         '?start=1&limit=100&sortBy=market_cap&sortType=desc'
 //         '&convert=USD&cryptoType=all&tagType=all&audited=false'
 //         '&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,'
 //         'max_supply,circulating_supply,total_supply,volume_7d,volume_30d,'
 //         'self_reported_circulating_supply,self_reported_market_cap';
 
+//     //  Encode target URL to pass as a query parameter to Worker
+
 //     final encodedTarget = Uri.encodeComponent(targetUrl);
 //     // print(encodedTarget);
 
 //     // If using query-key method:
+//     //  Construct the final worker URL
+//     // If _proxyKey is set, attach as a query parameter
 //     final workerUrl = (_proxyKey == null)
 //         ? '$_workerBase$encodedTarget'
 //         : '$_workerBase$encodedTarget&key=${Uri.encodeComponent(_proxyKey)}';
@@ -131,7 +103,7 @@ class ApiProvider {
 //   Future<Response<dynamic>> getTopMarketCapData() async {
 //     final targetUrl =
 //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing'
-//         '?start=1&limit=10&sortBy=market_cap&sortType=desc'
+//         '?start=1&limit=100&sortBy=market_cap&sortType=desc'
 //         '&convert=USD&cryptoType=all&tagType=all&audited=false'
 //         '&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,'
 //         'max_supply,circulating_supply,total_supply,volume_7d,volume_30d,'
@@ -170,10 +142,10 @@ class ApiProvider {
 //     }
 //   }
 
-//   Future<Response<dynamic>> getTopGainerCapData() async {
+//   Future<Response<dynamic>> getTopGainerData() async {
 //     final targetUrl =
 //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing'
-//         '?start=1&limit=10&sortBy=percent_change_24h&sortType=desc'
+//         '?start=1&limit=100&sortBy=percent_change_24h&sortType=desc'
 //         '&convert=USD&cryptoType=all&tagType=all&audited=false'
 //         '&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,'
 //         'max_supply,circulating_supply,total_supply,volume_7d,volume_30d,'
@@ -212,10 +184,10 @@ class ApiProvider {
 //     }
 //   }
 
-//   Future<Response<dynamic>> getTopLosersCapData() async {
+//   Future<Response<dynamic>> getTopLoserData() async {
 //     final targetUrl =
 //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing'
-//         '?start=1&limit=10&sortBy=percent_change_24h&sortType=asc'
+//         '?start=1&limit=100&sortBy=percent_change_24h&sortType=asc'
 //         '&convert=USD&cryptoType=all&tagType=all&audited=false'
 //         '&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,'
 //         'max_supply,circulating_supply,total_supply,volume_7d,volume_30d,'
@@ -269,39 +241,3 @@ class ApiProvider {
 //   }
 // }
 
-// // ***********************************************************************************************************************
-
-// // import 'package:dio/dio.dart';
-// // import 'package:flutter/foundation.dart' show kIsWeb;
-
-// // class Apiprovider {
-// //   Future<Response<dynamic>> getTopMarketCapData() async {
-// //     final dio = Dio();
-
-// //     // Original API
-// //     const apiUrl =
-// //         'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap';
-
-// //     // Add proxy prefix if running on Web
-// //     final targetUrl = kIsWeb
-// //         // https://cors-anywhere.herokuapp.com/corsdemo
-// //         ? 'https://cors-anywhere.herokuapp.com/$apiUrl'
-// //         : apiUrl;
-
-// //     final response = await dio.get(targetUrl);
-// //     return response;
-// //   }
-// // }
-
-// // ***********************************************************************************************************************
-// // import 'package:dio/dio.dart';
-
-// // class Apiprovider {
-// //   Future<Response<dynamic>> getTopMarketCapData() async {
-// //     final dio = Dio();
-// //     final response = await dio.get(
-// //       'https://api.coinmarketcap.com/data-api/v3/cryptocurrency/listing?start=1&limit=10&sortBy=market_cap&sortType=desc&convert=USD&cryptoType=all&tagType=all&audited=false&aux=ath,atl,high24h,low24h,num_market_pairs,cmc_rank,date_added,max_supply,circulating_supply,total_supply,volume_7d,volume_30d,self_reported_circulating_supply,self_reported_market_cap',
-// //     );
-// //     return response;
-// //   }
-// // }
