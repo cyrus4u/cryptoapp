@@ -2,6 +2,7 @@ import 'package:cryptoapp/provider/crypto_data_provider.dart';
 import 'package:cryptoapp/provider/make_view_provider.dart';
 import 'package:cryptoapp/provider/theme_provider.dart';
 import 'package:cryptoapp/ui/main_wrapper.dart';
+import 'package:cryptoapp/ui/signUpScreen.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
-         ChangeNotifierProvider(create: (context) => MarketViewProvider()),
+        ChangeNotifierProvider(create: (context) => MarketViewProvider()),
       ],
       child: MyApp(),
     ),
@@ -65,7 +66,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           home: Directionality(
             textDirection: TextDirection.ltr,
-            child: MainWrapper(),
+            child: Signupscreen(),
           ),
         );
       },
