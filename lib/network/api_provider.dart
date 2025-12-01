@@ -25,21 +25,21 @@
 //     );
 //   }
 
-//   dynamic callRegisterApi(name, email, password) async {
-//     var formData = FormData.fromMap({
-//       'name': name,
-//       'email': email,
-//       'password': password,
-//       'password_confirmation': password,
-//     });
+  // dynamic callRegisterApi(name, email, password) async {
+  //   var formData = FormData.fromMap({
+  //     'name': name,
+  //     'email': email,
+  //     'password': password,
+  //     'password_confirmation': password,
+  //   });
 
-//     final response = await Dio().post(
-//       'https://besenior.ir/api/register',
-//       data: formData,
-//     );
+  //   final response = await Dio().post(
+  //     'https://besenior.ir/api/register',
+  //     data: formData,
+  //   );
 
-//     return response;
-//   }
+  //   return response;
+  // }
 // }
 // ************************************************************************
 
@@ -108,6 +108,23 @@ class ApiProvider {
 
   // Fetch top losers
   Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
+
+  
+   dynamic callRegisterApi(name, email, password) async {
+    var formData = FormData.fromMap({
+      'name': name,
+      'email': email,
+      'password': password,
+      'password_confirmation': password,
+    });
+
+    final response = await Dio().post(
+      'https://besenior.ir/api/register',
+      data: formData,
+    );
+
+    return response;
+  }
 }
 // **************************************************************************************
 

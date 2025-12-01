@@ -1,6 +1,10 @@
+import 'package:cryptoapp/network/response_model.dart';
+import 'package:cryptoapp/provider/user_data_provider.dart';
+import 'package:cryptoapp/ui/main_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -16,7 +20,7 @@ class _SignupscreenState extends State<Signupscreen> {
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
-  //  late UserDataProvider userProvider;
+  late UserDataProvider userProvider;
 
   @override
   void dispose() {
@@ -29,6 +33,7 @@ class _SignupscreenState extends State<Signupscreen> {
 
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserDataProvider>(context);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -123,7 +128,9 @@ class _SignupscreenState extends State<Signupscreen> {
                         prefixIcon: const Icon(Icons.lock_open),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isObscure ? Icons.visibility : Icons.visibility_off,
+                            _isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
@@ -159,7 +166,51 @@ class _SignupscreenState extends State<Signupscreen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: height * 0.02),
-                    signupBtn(),
+                    Consumer<UserDataProvider>(
+                      builder: (context, userDataProvider, child) {
+                        switch (userDataProvider.registerStatus?.status) {
+                          case Status.LOADING:
+                            return CircularProgressIndicator();
+                          case Status.COMPLETED:
+                            // savedLogin(userDataProvider.registerStatus?.data);
+                            WidgetsBinding.instance!.addPostFrameCallback(
+                              (timeStamp) => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainWrapper(),
+                                ),
+                              ),
+                            );
+                            return signupBtn();
+                          case Status.ERROR:
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                signupBtn(),
+                                const SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.error,
+                                      color: Colors.redAccent,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      userDataProvider.registerStatus!.message,
+                                      style: GoogleFonts.ubuntu(
+                                        color: Colors.redAccent,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          default:
+                            return signupBtn();
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -183,11 +234,11 @@ class _SignupscreenState extends State<Signupscreen> {
         onPressed: () {
           // Validate returns true if the form is valid, or false otherwise.
           if (_formKey.currentState!.validate()) {
-            // userProvider.callRegisterApi(
-            //   nameController.text,
-            //   emailController.text,
-            //   passwordController.text,
-            // );
+            userProvider.callRegisterApi(
+              nameController.text,
+              emailController.text,
+              passwordController.text,
+            );
           }
         },
         child: const Text('Sign Up'),
