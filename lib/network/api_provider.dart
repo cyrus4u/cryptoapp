@@ -25,21 +25,21 @@
 //     );
 //   }
 
-  // dynamic callRegisterApi(name, email, password) async {
-  //   var formData = FormData.fromMap({
-  //     'name': name,
-  //     'email': email,
-  //     'password': password,
-  //     'password_confirmation': password,
-  //   });
+// dynamic callRegisterApi(name, email, password) async {
+//   var formData = FormData.fromMap({
+//     'name': name,
+//     'email': email,
+//     'password': password,
+//     'password_confirmation': password,
+//   });
 
-  //   final response = await Dio().post(
-  //     'https://besenior.ir/api/register',
-  //     data: formData,
-  //   );
+//   final response = await Dio().post(
+//     'https://besenior.ir/api/register',
+//     data: formData,
+//   );
 
-  //   return response;
-  // }
+//   return response;
+// }
 // }
 // ************************************************************************
 
@@ -54,7 +54,7 @@
 //
 // - Mobile apps are not affected because they make requests directly
 //   from the device.
-// 
+//
 // To make Web builds work:
 //   1️⃣ Cloudflare Worker → secure proxy that fetches crypto data
 //   2️⃣ Supabase Edge Function → adds authentication + protects API keys
@@ -65,31 +65,23 @@
 //     ✔ Chrome / Flutter Web
 //
 // NOTE:
-// Replace the hardcoded endpoints below with your Worker/Supabase URLs  
+// Replace the hardcoded endpoints below with your Worker/Supabase URLs
 // when building for Web.
 //
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiProvider {
-  // Base URL for your Supabase Edge Function
-  // This function acts as a proxy to the CoinMarketCap API
-  static final String _nodeBase =
-      'https://ukrshwdqetdpzfsjmgbc.supabase.co/functions/v1/crypto';
+  static final String _nodeBase = dotenv.env['NODE_BASE'] ?? '';
+  static final String _supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
-  // Supabase "anon key" for authentication
-  // Required to call the Supabase Edge Function securely
-  static const String _supabaseAnonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVrcnNod2RxZXRkcHpmc2ptZ2JjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI4NDkzMzMsImV4cCI6MjA3ODQyNTMzM30.KNnALmGW6pW5GrUslwnL07dNUQRDwbYkzIhJV2bi4XU'; // truncated
-
-  // Dio instance for making HTTP requests
   final Dio _dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 20), // wait up to 20s for connection
-      receiveTimeout: const Duration(seconds: 30), // wait up to 30s for response
-      followRedirects: true, // follow HTTP redirects automatically
-      validateStatus: (status) => status != null && status < 500, // treat 4xx as error
+      connectTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 30),
+      followRedirects: true,
+      validateStatus: (status) => status != null && status < 500,
       headers: {
-        // Both 'apikey' and 'Authorization' are required for Supabase function
         'apikey': _supabaseAnonKey,
         'Authorization': 'Bearer $_supabaseAnonKey',
         'Content-Type': 'application/json',
@@ -97,20 +89,12 @@ class ApiProvider {
     ),
   );
 
-  // Fetch all crypto
-  Future<Response<dynamic>> getAllCryptoData() => _dio.get('$_nodeBase');
-
-  // Fetch top market cap coins
+  Future<Response<dynamic>> getAllCryptoData() => _dio.get(_nodeBase);
   Future<Response<dynamic>> getTopMarketCapData() => _dio.get('$_nodeBase/topMarketCap');
-
-  // Fetch top gainers
   Future<Response<dynamic>> getTopGainerData() => _dio.get('$_nodeBase/topGainer');
-
-  // Fetch top losers
   Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
 
-  
-   dynamic callRegisterApi(name, email, password) async {
+  dynamic callRegisterApi(name, email, password) async {
     var formData = FormData.fromMap({
       'name': name,
       'email': email,
@@ -126,6 +110,7 @@ class ApiProvider {
     return response;
   }
 }
+
 // **************************************************************************************
 
 // import 'package:dio/dio.dart';
