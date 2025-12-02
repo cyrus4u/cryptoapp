@@ -2,7 +2,6 @@ import 'package:cryptoapp/provider/crypto_data_provider.dart';
 import 'package:cryptoapp/provider/make_view_provider.dart';
 import 'package:cryptoapp/provider/theme_provider.dart';
 import 'package:cryptoapp/provider/user_data_provider.dart';
-import 'package:cryptoapp/test_registration.dart';
 import 'package:cryptoapp/ui/signUpScreen.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/gestures.dart';
