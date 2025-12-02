@@ -172,16 +172,16 @@ class _SignupscreenState extends State<Signupscreen> {
                           case Status.LOADING:
                             return CircularProgressIndicator();
                           case Status.COMPLETED:
-                            // savedLogin(userDataProvider.registerStatus?.data);
-                            WidgetsBinding.instance!.addPostFrameCallback(
-                              (timeStamp) => Navigator.pushReplacement(
+                            // ✅ Navigate to MainWrapper after frame renders
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const MainWrapper(),
                                 ),
-                              ),
-                            );
-                            return signupBtn();
+                              );
+                            });
+                            return signupBtn(); // still show button until navigation
                           case Status.ERROR:
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,11 +195,14 @@ class _SignupscreenState extends State<Signupscreen> {
                                       color: Colors.redAccent,
                                     ),
                                     const SizedBox(width: 6),
-                                    Text(
-                                      userDataProvider.registerStatus!.message,
-                                      style: GoogleFonts.ubuntu(
-                                        color: Colors.redAccent,
-                                        fontSize: 15,
+                                    Expanded(
+                                      child: Text(
+                                        userDataProvider
+                                            .registerStatus!
+                                            .message,
+                                        style: TextStyle(
+                                          color: Colors.redAccent,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -231,16 +234,17 @@ class _SignupscreenState extends State<Signupscreen> {
             borderRadius: BorderRadius.circular(15.0),
           ),
         ),
-        onPressed: () {
-          // Validate returns true if the form is valid, or false otherwise.
-          if (_formKey.currentState!.validate()) {
-            userProvider.callRegisterApi(
-              nameController.text,
-              emailController.text,
-              passwordController.text,
-            );
-          }
-        },
+        onPressed: userProvider.registerStatus?.status == Status.LOADING
+            ? null
+            : () {
+                if (_formKey.currentState!.validate()) {
+                  userProvider.callRegisterApi(
+                    nameController.text,
+                    emailController.text,
+                    passwordController.text,
+                  );
+                }
+              },
         child: const Text('Sign Up'),
       ),
     );

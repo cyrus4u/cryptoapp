@@ -2,7 +2,7 @@ import 'package:cryptoapp/provider/crypto_data_provider.dart';
 import 'package:cryptoapp/provider/make_view_provider.dart';
 import 'package:cryptoapp/provider/theme_provider.dart';
 import 'package:cryptoapp/provider/user_data_provider.dart';
-import 'package:cryptoapp/ui/main_wrapper.dart';
+import 'package:cryptoapp/test_registration.dart';
 import 'package:cryptoapp/ui/signUpScreen.dart';
 import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/gestures.dart';
@@ -11,17 +11,35 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 1️⃣ Load .env file
+  // await dotenv.load(); // simplest
+  await dotenv.load(fileName: 'assets/.env'); // explicitly specify the file
+  print('SUPABASE_URL: ${dotenv.env['SUPABASE_URL']}');
+  print('SUPABASE_ANON_KEY: ${dotenv.env['SUPABASE_ANON_KEY']}');
+
+  // await dotenv.load(fileName: ".env");
+
+  // 2️⃣ Initialize Supabase
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => CryptoDataProvider()),
-        ChangeNotifierProvider(create: (context) => MarketViewProvider()),
-        ChangeNotifierProvider(create: (context) => UserDataProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => CryptoDataProvider()),
+        ChangeNotifierProvider(create: (_) => MarketViewProvider()),
+        ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ],
       child: MyApp(),
     ),
