@@ -1,22 +1,24 @@
-import 'package:cryptoapp/network/response_model.dart';
-import 'package:cryptoapp/provider/user_data_provider.dart';
-import 'package:cryptoapp/ui/main_wrapper.dart';
+import 'package:cryptoapp/data/models/supabase_user_model.dart';
+import 'package:cryptoapp/data/data_source/response_model.dart';
+import 'package:cryptoapp/logic/provider/user_data_provider.dart';
+import 'package:cryptoapp/presentation/ui/main_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Signupscreen extends StatefulWidget {
-  const Signupscreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<Signupscreen> createState() => _SignupscreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignupscreenState extends State<Signupscreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
@@ -34,8 +36,10 @@ class _SignupscreenState extends State<Signupscreen> {
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserDataProvider>(context);
+
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: LayoutBuilder(
@@ -60,42 +64,40 @@ class _SignupscreenState extends State<Signupscreen> {
                 Flexible(
                   child: Center(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Lottie.asset(
-                          'images/waveloop.json',
-                          height: height * .2,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fill,
-                        ),
-                        SizedBox(height: height * .01),
+                        const SizedBox(height: 10),
                         Padding(
-                          padding: EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
                             'Sign Up',
                             style: GoogleFonts.ubuntu(
-                              fontSize: height * .035,
+                              fontSize: height * 0.035,
                               color: Theme.of(context).unselectedWidgetColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        SizedBox(height: height * .01),
+                        const SizedBox(height: 10),
                         Padding(
-                          padding: EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
                             'Create Account',
                             style: GoogleFonts.ubuntu(
-                              fontSize: height * .035,
+                              fontSize: height * 0.03,
                               color: Theme.of(context).unselectedWidgetColor,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        SizedBox(height: height * .03),
+                        SizedBox(height: height * 0.03),
+
                         Padding(
-                          padding: EdgeInsets.only(left: 20, right: 20),
+                          padding: const EdgeInsets.only(
+                            left: 20.0,
+                            right: 20,
+                            bottom: 20,
+                          ),
                           child: Form(
                             key: _formKey,
                             child: Column(
@@ -193,6 +195,7 @@ class _SignupscreenState extends State<Signupscreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 SizedBox(height: height * 0.02),
+
                                 Consumer<UserDataProvider>(
                                   builder: (context, userDataProvider, child) {
                                     switch (userDataProvider
@@ -201,18 +204,21 @@ class _SignupscreenState extends State<Signupscreen> {
                                       case Status.LOADING:
                                         return CircularProgressIndicator();
                                       case Status.COMPLETED:
-                                        // ✅ Navigate to MainWrapper after frame renders
+                                        // savedLogin(
+                                        //   userDataProvider.registerStatus?.data,
+                                        // );
                                         WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const MainWrapper(),
-                                                ),
-                                              );
-                                            });
-                                        return signupBtn(); // still show button until navigation
+                                            .addPostFrameCallback(
+                                              (timeStamp) =>
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const MainWrapper(),
+                                                    ),
+                                                  ),
+                                            );
+                                        return signupBtn();
                                       case Status.ERROR:
                                         return Column(
                                           crossAxisAlignment:
@@ -227,14 +233,13 @@ class _SignupscreenState extends State<Signupscreen> {
                                                   color: Colors.redAccent,
                                                 ),
                                                 const SizedBox(width: 6),
-                                                Expanded(
-                                                  child: Text(
-                                                    userDataProvider
-                                                        .registerStatus!
-                                                        .message,
-                                                    style: TextStyle(
-                                                      color: Colors.redAccent,
-                                                    ),
+                                                Text(
+                                                  userDataProvider
+                                                      .registerStatus!
+                                                      .message,
+                                                  style: GoogleFonts.ubuntu(
+                                                    color: Colors.redAccent,
+                                                    fontSize: 15,
                                                   ),
                                                 ),
                                               ],
@@ -250,11 +255,9 @@ class _SignupscreenState extends State<Signupscreen> {
                             ),
                           ),
                         ),
-                        const Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text('Already have an account?'),
-                          ),
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Text('Already have an account?'),
                         ),
                         const SizedBox(height: 5),
                         Padding(
@@ -290,39 +293,40 @@ class _SignupscreenState extends State<Signupscreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // const SizedBox(height: 30,),
                 Lottie.asset(
                   'images/waveloop.json',
-                  height: height * .2,
-                  width: MediaQuery.of(context).size.width,
+                  height: height * 0.2,
+                  width: double.infinity,
                   fit: BoxFit.fill,
                 ),
-                SizedBox(height: height * .01),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
                     'Sign Up',
                     style: GoogleFonts.ubuntu(
-                      fontSize: height * .035,
+                      fontSize: height * 0.035,
                       color: Theme.of(context).unselectedWidgetColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: height * .01),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20.0),
                   child: Text(
                     'Create Account',
                     style: GoogleFonts.ubuntu(
-                      fontSize: height * .035,
+                      fontSize: height * 0.03,
                       color: Theme.of(context).unselectedWidgetColor,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                SizedBox(height: height * .03),
+                SizedBox(height: height * 0.03),
+
                 Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.only(left: 20.0, right: 20),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -420,24 +424,30 @@ class _SignupscreenState extends State<Signupscreen> {
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: height * 0.02),
+
                         Consumer<UserDataProvider>(
                           builder: (context, userDataProvider, child) {
                             switch (userDataProvider.registerStatus?.status) {
                               case Status.LOADING:
                                 return CircularProgressIndicator();
                               case Status.COMPLETED:
-                                // ✅ Navigate to MainWrapper after frame renders
                                 WidgetsBinding.instance.addPostFrameCallback((
                                   _,
-                                ) {
+                                ) async {
+                                  final data =
+                                      userDataProvider.registerStatus!.data;
+                                  await savedLogin(data);
+
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const MainWrapper(),
+                                      builder: (_) => const MainWrapper(),
                                     ),
                                   );
                                 });
-                                return signupBtn(); // still show button until navigation
+
+                                return signupBtn();
+
                               case Status.ERROR:
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -451,14 +461,13 @@ class _SignupscreenState extends State<Signupscreen> {
                                           color: Colors.redAccent,
                                         ),
                                         const SizedBox(width: 6),
-                                        Expanded(
-                                          child: Text(
-                                            userDataProvider
-                                                .registerStatus!
-                                                .message,
-                                            style: TextStyle(
-                                              color: Colors.redAccent,
-                                            ),
+                                        Text(
+                                          userDataProvider
+                                              .registerStatus!
+                                              .message,
+                                          style: GoogleFonts.ubuntu(
+                                            color: Colors.redAccent,
+                                            fontSize: 15,
                                           ),
                                         ),
                                       ],
@@ -519,19 +528,31 @@ class _SignupscreenState extends State<Signupscreen> {
             borderRadius: BorderRadius.circular(15.0),
           ),
         ),
-        onPressed: userProvider.registerStatus?.status == Status.LOADING
-            ? null
-            : () {
-                if (_formKey.currentState!.validate()) {
-                  userProvider.callRegisterApi(
-                    nameController.text,
-                    emailController.text,
-                    passwordController.text,
-                  );
-                }
-              },
+        onPressed: () {
+          // Validate returns true if the form is valid, or false otherwise.
+          if (_formKey.currentState!.validate()) {
+            userProvider.callRegisterApi(
+              nameController.text,
+              emailController.text,
+              passwordController.text,
+            );
+          }
+        },
         child: const Text('Sign Up'),
       ),
     );
   }
+
+  Future<void> savedLogin(dynamic data) async {
+    if (data == null) return;
+
+    final user = data as SupaUserModel;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_id', user.id);
+    await prefs.setString('email', user.email);
+    await prefs.setString('username', user.username);
+  }
+
+ 
 }

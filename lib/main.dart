@@ -1,14 +1,17 @@
-import 'package:cryptoapp/provider/crypto_data_provider.dart';
-import 'package:cryptoapp/provider/make_view_provider.dart';
-import 'package:cryptoapp/provider/theme_provider.dart';
-import 'package:cryptoapp/provider/user_data_provider.dart';
-import 'package:cryptoapp/ui/signUpScreen.dart';
-import 'package:cryptoapp/ui/ui_helper/theme_switcher.dart';
+import 'package:cryptoapp/logic/provider/crypto_data_provider.dart';
+import 'package:cryptoapp/logic/provider/make_view_provider.dart';
+import 'package:cryptoapp/logic/provider/theme_provider.dart';
+import 'package:cryptoapp/logic/provider/user_data_provider.dart';
+import 'package:cryptoapp/presentation/ui/main_wrapper.dart';
+import 'package:cryptoapp/presentation/ui/session_handler.dart';
+import 'package:cryptoapp/presentation/ui/sign_up_screen.dart';
+import 'package:cryptoapp/presentation/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/app_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -83,10 +86,7 @@ class _MyAppState extends State<MyApp> {
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,
           debugShowCheckedModeBanner: false,
-          home: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Signupscreen(),
-          ),
+          home: SessionHandler(),
         );
       },
     );

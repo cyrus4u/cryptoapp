@@ -1,6 +1,7 @@
-import 'package:cryptoapp/models/cryptoModel/all_crypto_model.dart';
-import 'package:cryptoapp/network/api_provider.dart';
-import 'package:cryptoapp/network/response_model.dart';
+import 'package:cryptoapp/data/models/cryptoModel/all_crypto_model.dart';
+import 'package:cryptoapp/data/data_source/api_provider.dart';
+import 'package:cryptoapp/data/data_source/response_model.dart';
+import 'package:cryptoapp/data/repositories/crypto_data_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class CryptoDataProvider extends ChangeNotifier {
   late AllCryptoModel dataFuture;
   late ResponseModel state;
   late Response<dynamic> response;
+  CryptoDataRepository repository = CryptoDataRepository();
 
   getTopMarketCapData() async {
     state = ResponseModel.loading('...loading');
@@ -26,22 +28,19 @@ class CryptoDataProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   getTopGainerData() async {
     state = ResponseModel.loading('...loading');
     try {
-      response = await apiProvider.getTopGainerData();
-      if (response.statusCode == 200) {
-        dataFuture = AllCryptoModel.fromJson(response.data);
-        state = ResponseModel.completed(dataFuture);
-      } else {
-        state = ResponseModel.error('something is wrong...');
-      }
+      dataFuture = await repository.getTopGainerData();
+      state = ResponseModel.completed(dataFuture);
       notifyListeners();
     } catch (e) {
       state = ResponseModel.error('check your connection...');
       notifyListeners();
     }
   }
+
   getTopLoserData() async {
     state = ResponseModel.loading('...loading');
     try {

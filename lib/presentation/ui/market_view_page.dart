@@ -2,11 +2,11 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cryptoapp/helpers/decimal_rounder.dart';
-import 'package:cryptoapp/models/cryptoModel/crypto_data.dart';
-import 'package:cryptoapp/network/response_model.dart' show Status;
-import 'package:cryptoapp/provider/make_view_provider.dart';
-import 'package:cryptoapp/ui/ui_helper/shimmer_market_widget.dart';
+import 'package:cryptoapp/presentation/helpers/decimal_rounder.dart';
+import 'package:cryptoapp/data/models/cryptoModel/crypto_data.dart';
+import 'package:cryptoapp/data/data_source/response_model.dart' show Status;
+import 'package:cryptoapp/logic/provider/make_view_provider.dart';
+import 'package:cryptoapp/presentation/ui/ui_helper/shimmer_market_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';

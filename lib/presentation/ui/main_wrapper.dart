@@ -1,8 +1,8 @@
-import 'package:cryptoapp/ui/home_page.dart';
-import 'package:cryptoapp/ui/market_view_page.dart';
-import 'package:cryptoapp/ui/profile_page.dart';
-import 'package:cryptoapp/ui/ui_helper/bottom_nav.dart';
-import 'package:cryptoapp/ui/watch_list_page.dart';
+import 'package:cryptoapp/presentation/ui/home_page.dart';
+import 'package:cryptoapp/presentation/ui/market_view_page.dart';
+import 'package:cryptoapp/presentation/ui/profile_page.dart';
+import 'package:cryptoapp/presentation/ui/ui_helper/bottom_nav.dart';
+import 'package:cryptoapp/presentation/ui/watch_list_page.dart';
 import 'package:flutter/material.dart';
 
 class MainWrapper extends StatefulWidget {

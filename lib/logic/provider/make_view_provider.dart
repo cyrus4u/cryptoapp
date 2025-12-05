@@ -1,8 +1,8 @@
 
 
-import 'package:cryptoapp/models/cryptoModel/all_crypto_model.dart';
-import 'package:cryptoapp/network/api_provider.dart';
-import 'package:cryptoapp/network/response_model.dart';
+import 'package:cryptoapp/data/models/cryptoModel/all_crypto_model.dart';
+import 'package:cryptoapp/data/data_source/api_provider.dart';
+import 'package:cryptoapp/data/data_source/response_model.dart';
 import 'package:flutter/cupertino.dart';
 
 
