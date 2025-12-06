@@ -23,23 +23,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final PageController _pageViewController = PageController(initialPage: 0);
 
-  var defaultChoiceIndex = 0;
-
   final List<String> _choicesList = [
     'Top MarketCaps',
     'Top Gainers',
     'Top Losers',
   ];
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final cryptoProvider = Provider.of<CryptoDataProvider>(
-      context,
-      listen: false,
-    );
-    cryptoProvider.getTopMarketCapData();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -148,34 +137,34 @@ class _HomePageState extends State<HomePage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: List.generate(_choicesList.length, (index) {
-                    return ChoiceChip(
-                      label: Text(
-                        _choicesList[index],
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      selected: defaultChoiceIndex == index,
-                      selectedColor: Colors.blue,
-                      onSelected: (value) {
-                        setState(() {
-                          defaultChoiceIndex = value
-                              ? index
-                              : defaultChoiceIndex;
-                          switch (index) {
-                            case 0:
-                              cryptoProvider.getTopMarketCapData();
-                            case 1:
-                              cryptoProvider.getTopGainerData();
-                            case 2:
-                              cryptoProvider.getTopLoserData();
-                          }
-                        });
-                      },
+                child: Consumer<CryptoDataProvider>(
+                  builder: (context, cryptoDataProvider, child) {
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(_choicesList.length, (index) {
+                        return ChoiceChip(
+                          label: Text(
+                            _choicesList[index],
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          selected:
+                              cryptoDataProvider.defaultChoiceIndex == index,
+                          selectedColor: Colors.blue,
+                          onSelected: (value) {
+                            switch (index) {
+                              case 0:
+                                cryptoProvider.getTopMarketCapData();
+                              case 1:
+                                cryptoProvider.getTopGainerData();
+                              case 2:
+                                cryptoProvider.getTopLoserData();
+                            }
+                          },
+                        );
+                      }),
                     );
-                  }),
+                  },
                 ),
               ),
               SizedBox(
@@ -392,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                           ).textTheme.bodySmall,
                                           maxLines: 1,
-                                          
+
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
@@ -401,8 +390,6 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                           ).textTheme.bodySmall,
                                         ),
-                                        
-                                        
                                       ],
                                     ),
                                   ),

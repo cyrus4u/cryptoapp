@@ -39,7 +39,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => CryptoDataProvider()),
+        // ChangeNotifierProvider(create: (_) => CryptoDataProvider()),
         ChangeNotifierProvider(create: (_) => MarketViewProvider()),
         ChangeNotifierProvider(create: (_) => UserDataProvider()),
       ],

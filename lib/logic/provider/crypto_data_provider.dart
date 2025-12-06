@@ -11,9 +11,16 @@ class CryptoDataProvider extends ChangeNotifier {
   late ResponseModel state;
   late Response<dynamic> response;
   CryptoDataRepository repository = CryptoDataRepository();
+  var defaultChoiceIndex = 0;
+  
+  CryptoDataProvider(){
+    getTopMarketCapData();
+  }
 
   getTopMarketCapData() async {
+    defaultChoiceIndex = 0;
     state = ResponseModel.loading('...loading');
+    notifyListeners();
     try {
       response = await apiProvider.getTopMarketCapData();
       if (response.statusCode == 200) {
@@ -30,7 +37,9 @@ class CryptoDataProvider extends ChangeNotifier {
   }
 
   getTopGainerData() async {
+    defaultChoiceIndex = 1;
     state = ResponseModel.loading('...loading');
+    notifyListeners();
     try {
       dataFuture = await repository.getTopGainerData();
       state = ResponseModel.completed(dataFuture);
@@ -42,7 +51,9 @@ class CryptoDataProvider extends ChangeNotifier {
   }
 
   getTopLoserData() async {
+    defaultChoiceIndex = 2;
     state = ResponseModel.loading('...loading');
+    notifyListeners();
     try {
       response = await apiProvider.getTopLoserData();
       if (response.statusCode == 200) {

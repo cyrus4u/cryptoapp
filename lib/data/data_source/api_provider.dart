@@ -93,22 +93,6 @@ class ApiProvider {
   Future<Response<dynamic>> getTopMarketCapData() => _dio.get('$_nodeBase/topMarketCap');
   Future<Response<dynamic>> getTopGainerData() => _dio.get('$_nodeBase/topGainer');
   Future<Response<dynamic>> getTopLoserData() => _dio.get('$_nodeBase/topLoser');
-
-  // dynamic callRegisterApi(name, email, password) async {
-  //   var formData = FormData.fromMap({
-  //     'name': name,
-  //     'email': email,
-  //     'password': password,
-  //     'password_confirmation': password,
-  //   });
-
-  //   final response = await Dio().post(
-  //     'https://besenior.ir/api/register',
-  //     data: formData,
-  //   );
-
-  //   return response;
-  // }
 }
 
 // **************************************************************************************
