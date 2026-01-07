@@ -38,4 +38,8 @@ supabase_flutter: ^2.10.3
 flutter_dotenv: ^6.0.0
 shared_preferences: ^2.5.3
 
-####  Screenshots
+#### Screenshots
+
+![App Screenshot](image-placeholder.png)
+*Replace this with actual screenshots of your app.*
+
