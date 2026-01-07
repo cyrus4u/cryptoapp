@@ -66,6 +66,11 @@ API_KEY=your_api_key_here
 ```bash
 flutter run
 ```
+Author
+
+### Author
+
+👨‍💻 [cyrus4u](https://github.com/cyrus4u)
 
 
 
