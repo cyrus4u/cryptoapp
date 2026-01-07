@@ -48,7 +48,7 @@ A personal learning project built with Flutter. This app displays real-time cryp
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Hamed/cryptoapp.git
+git clone https://github.com/cyrus4u/cryptoapp.git
 2- Navigate into the project directory:
 cd cryptoapp
 3- Install dependencies:
