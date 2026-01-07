@@ -49,14 +49,23 @@ A personal learning project built with Flutter. This app displays real-time cryp
 1. Clone the repository:
 ```bash
 git clone https://github.com/cyrus4u/cryptoapp.git
+```
 2- Navigate into the project directory:
+```bash
 cd cryptoapp
+```
 3- Install dependencies:
+```bash
 flutter pub get
+```
 4- Add your API key to a .env file (create one in the root directory if it doesn't exist):
+```bash
 API_KEY=your_api_key_here
+```
 5- Run the app:
+```bash
 flutter run
+```
 
 
 
