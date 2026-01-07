@@ -43,6 +43,7 @@ A personal learning project built with Flutter. This app displays real-time cryp
 ![CryptoApp Screenshot 2](images/cryptoApp02.jpeg)
 
 *Replace this with actual screenshots of your app.*
+
 Setup
 
 1- Clone the repository:
