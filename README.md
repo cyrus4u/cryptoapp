@@ -1,16 +1,44 @@
-# cryptoapp
+# CryptoApp
 
-A new Flutter project.
+A personal learning project built with Flutter. This app displays real-time cryptocurrency prices, featuring top market cap, gainers, and losers, with a smooth UI and dark/light mode support. It uses **Supabase** for authentication and API requests.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+### Features
+- 🚀 **Live cryptocurrency prices**
+- 📊 **Top market cap, top gainers, top losers**
+- 🌙 **Dark mode / Light mode**
+- 🔄 **Pull-to-refresh**
+- ⚠️ **Error & loading states**
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Tech Stack
+- **Flutter**: The framework for building natively compiled applications.
+- **Supabase**: For authentication and data fetching (top market cap, top gainers, top losers).
+- **Provider**: State management.
+- **Dio**: For API requests.
+- **Shared Preferences**: For local storage.
+  
+#### Dependencies
+- provider: ^6.1.5+1
+- google_fonts: ^6.3.2
+- flutter_localizations:
+    sdk: flutter
+- intl: any
+- smooth_page_indicator: ^1.2.1
+- marquee: ^2.3.0
+- dio: ^5.9.0
+- shimmer: ^3.0.0
+- cached_network_image: ^3.4.1
+- flutter_svg: ^2.2.3
+- lottie: ^3.3.1
+- supabase_flutter: ^2.10.3
+- flutter_dotenv: ^6.0.0
+- shared_preferences: ^2.5.3
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### Screenshots
+
+![App Screenshot](image-placeholder.png)
+*Replace this with actual screenshots of your app.*
+
